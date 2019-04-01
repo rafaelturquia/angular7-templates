@@ -1,0 +1,50 @@
+<h3>Dynamic Columns</h3>
+<div class="container-fluid">
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <p-treeTable [value]="files1" [columns]="cols" [paginator]="true" [rows]="8" selectionMode="single" [(selection)]="selectedCar"
+        (onRowSelect)="onRowSelect($event)">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns">
+              {{col.header}}
+            </th>
+          </tr>
+          <tr>
+            <th *ngFor="let col of columns">
+              <input pInputText type="text" (input)="filterSingles($event, col.data, col.filter)">
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+          <tr>
+            <td *ngFor="let col of columns; let i = index" ttEditableColumn [ngClass]="{'ui-toggler-column': i == 0}">
+              <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+              <p-treeTableCellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="rowData[col.field]" [ngStyle]="{'width': i == 0 ? '90%': '100%'}" />
+                </ng-template>
+                <ng-template pTemplate="output">{{rowData[col.field]}}</ng-template>
+              </p-treeTableCellEditor>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="summary" let-rowData>
+          <div style="text-align:left">
+            <app-modal-product></app-modal-product>
+          </div>
+        </ng-template>
+
+      </p-treeTable>
+    </div>
+  </div>
+</div>
+
+
+<!--
+  <p-autoComplete [(ngModel)]="files" [suggestions]="filteredSingle" (completeMethod)="filterSingles($event)" styleClass="wid100"
+    [minLength]="1" placeholder="Files" field="name" [multiple]="true">
+  </p-autoComplete>
+
+-->
